@@ -15,6 +15,15 @@ export default function usePermalinks({ routes, config }) {
     routePath,
     queryObject
   });
+  const push = (url) => {
+    //window.location.href = window.location.origin + route + '/';
+    console.log(
+      window.location.origin + (url.startsWith("/") ? "" : "/") + url
+    );
+    window.location.assign(
+      window.location.origin + (url.startsWith("/") ? "" : "/") + url
+    );
+  };
 
   useEffect(() => {
     setRoute(routes?.find((route) => locationPath?.includes(route.entry)));
@@ -28,5 +37,5 @@ export default function usePermalinks({ routes, config }) {
     );
   }, [route?.entry, locationPath]);
 
-  return { data: routeData, isLoading };
+  return { data: routeData, isLoading, push };
 }
