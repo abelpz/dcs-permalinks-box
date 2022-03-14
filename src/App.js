@@ -37,15 +37,7 @@ export default function App() {
         routes={[
           {
             entry: "scripture",
-            path: [
-              "org",
-              "lang",
-              "resource",
-              "branch",
-              "book",
-              "chapter",
-              "verse"
-            ]
+            path: "org/lang/resource/branch/book/chapter/verse".split("/")
           }
         ]}
       >

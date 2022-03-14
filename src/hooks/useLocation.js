@@ -1,21 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function useLocation() {
-  const [pathArray, setPathArray] = useState();
-  const [queryObject, setQueryObject] = useState();
-
+  const [location, setLocation] = useState({ pathname: null, search: null });
   useEffect(() => {
-    const location = window.location;
-
-    setPathArray(location.pathname.split("/"));
-
-    const queryParams = new URLSearchParams(location.search);
-    setQueryObject(Object.fromEntries(queryParams.entries()));
+    setLocation({
+      pathname: window.location.pathname,
+      search: window.location.search
+    });
   }, []);
 
-  const setLocation = ({ state, path }) => {
-    window.history.pushState(state ?? { path }, "", path);
-  };
+  const pathArray = useMemo(
+    () => (location.pathname ? [...location.pathname.split("/")] : null),
+    [location.pathname]
+  );
 
-  return { pathArray, queryObject, setLocation };
+  const queryObject = useMemo(() => {
+    const queryParams = new URLSearchParams(location.search);
+    return { ...Object.fromEntries(queryParams?.entries()) };
+  }, [location.search]);
+
+  const pushLocation = ({ state, path }) => {
+    const newLocation =
+      window.location.origin + (path.startsWith("/") ? "" : "/") + path;
+    window.location.assign(newLocation);
+    // window.history.pushState(state, "", newLocation);
+    // setLocation({
+    //   ...location,
+    //   pathname: window.location.pathname,
+    //   search: window.location.search
+    // });
+  };
+  return { pathArray, queryObject, pushLocation };
 }
