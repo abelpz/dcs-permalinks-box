@@ -3,39 +3,38 @@ import { PermalinksContext } from "../context/PermalinksConfig";
 import useLocation from "./useLocation";
 import useRouteData from "./useRouteData";
 
-export default function usePermalinks({ routes, config }) {
-  const { pathArray: locationPath, queryObject, pushLocation } = useLocation();
+export default function usePermalinks({ routes, config, id }) {
+  const { pathArray, queryObject, pushLocation, navigateTo } = useLocation();
 
-  const { routes: contextRoutes, config: contextConfig } = useContext(
-    PermalinksContext
-  ); // TODO: Make contextRoutes the fallback if routes is not provided.
+  const {
+    routes: contextRoutes,
+    config: contextConfig,
+    id: contextId
+  } = useContext(PermalinksContext); // TODO: Make contextRoutes the fallback if routes is not provided.
 
+  const _id = id ?? contextId;
   const _routes = routes ?? contextRoutes; //use context if not routes provided
 
   const push = (path) => pushLocation({ path }, path);
+  const navigate = (path) => navigateTo({ path });
 
-  console.log(locationPath);
+  const [locationPath, setLocationPath] = useState();
 
-  const route = useMemo(
-    () => _routes?.find((route) => locationPath?.includes(route.entry)),
-    [_routes, locationPath]
+  useEffect(() => {
+    setLocationPath([...pathArray]);
+  }, [pathArray]);
+
+  const route = _routes?.find((route) => locationPath?.includes(route.entry));
+
+  const routePath = locationPath?.slice(
+    locationPath?.findIndex((path) => path === route?.entry) + 1
   );
 
-  const routePath = useMemo(
-    () =>
-      locationPath?.slice(
-        locationPath?.findIndex((path) => path === route?.entry) + 1
-      ),
-
-    [route?.entry, locationPath]
-  );
-
-  console.log({ route, routePath });
   const { routeData, isLoading } = useRouteData({
     route,
     routePath,
     queryObject
   });
 
-  return { data: routeData, isLoading, push };
+  return { data: routeData, isLoading, push, navigate };
 }

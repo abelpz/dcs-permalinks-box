@@ -8,24 +8,29 @@ const link1 = "resource/unfoldingWord/en/tw/bible/kt/grace.md?search=mercy";
 const link2 = "scripture/unfoldingWord/en/ult/master/tit/3/12";
 
 export default function App() {
-  const { push } = usePermalinks({});
+  const { push, navigate } = usePermalinks({});
 
-  const handleClick = (e, link) => {
+  const handleNavigation = (e, link) => {
+    e.preventDefault();
+    navigate(link);
+  };
+
+  const handlePush = (e, link) => {
     e.preventDefault();
     push(link);
   };
   console.log("APP");
   return (
     <>
-      <a href="#home" onClick={(e) => handleClick(e, "/")}>
+      <a href="#home" onClick={(e) => handleNavigation(e, "/")}>
         Home
       </a>
       <br />
-      <a href="#link1" onClick={(e) => handleClick(e, link1)}>
+      <a href="#link1" onClick={(e) => handleNavigation(e, link1)}>
         Go to resource ({link1})
       </a>
       <br />
-      <a href="#link2" onClick={(e) => handleClick(e, link2)}>
+      <a href="#link2" onClick={(e) => handleNavigation(e, link2)}>
         Go to scripture ({link2})
       </a>
 
@@ -40,9 +45,23 @@ export default function App() {
             path: "org/lang/resource/branch/book/chapter/verse".split("/")
           }
         ]}
+        id={"scripture"}
       >
         <Scripture />
       </PermalinksConfig>
+      <br />
+      <h4>Testing push to history (WIP): </h4>
+      <a href="#home" onClick={(e) => handlePush(e, "/")}>
+        Home
+      </a>
+      <br />
+      <a href="#link1" onClick={(e) => handlePush(e, link1)}>
+        Go to resource ({link1})
+      </a>
+      <br />
+      <a href="#link2" onClick={(e) => handlePush(e, link2)}>
+        Go to scripture ({link2})
+      </a>
     </>
   );
 }

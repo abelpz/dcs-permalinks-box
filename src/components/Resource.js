@@ -13,7 +13,8 @@ export default function Resource() {
     []
   );
   const { data: permalink } = usePermalinks({
-    routes
+    routes,
+    id: "resource"
   });
   return (
     <>
