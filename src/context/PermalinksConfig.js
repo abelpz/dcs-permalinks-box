@@ -1,7 +1,12 @@
 import React from "react";
 
 export const PermalinksContext = React.createContext({
-  routes: [{ entry: "/" }]
+  routes: [
+    {
+      entry: "/",
+      path: []
+    }
+  ]
 });
 
 export default function PermalinksConfig({
