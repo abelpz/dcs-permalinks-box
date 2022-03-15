@@ -22,6 +22,7 @@ export default function App() {
   console.log("APP");
   return (
     <>
+      <h4>Regular Navigaton: </h4>
       <a href="#home" onClick={(e) => handleNavigation(e, "/")}>
         Home
       </a>
@@ -50,7 +51,7 @@ export default function App() {
         <Scripture />
       </PermalinksConfig>
       <br />
-      <h4>Testing push to history (WIP): </h4>
+      <h4>Navigation through push: </h4>
       <a href="#home" onClick={(e) => handlePush(e, "/")}>
         Home
       </a>
