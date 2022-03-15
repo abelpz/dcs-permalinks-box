@@ -4,7 +4,8 @@ export const PermalinksContext = React.createContext({
   routes: [
     {
       entry: "/",
-      path: []
+      path: [],
+      context: {}
     }
   ],
   id: null

@@ -10,7 +10,7 @@ export default function usePermalinks({ routes, config, id }) {
     routes: contextRoutes,
     config: contextConfig,
     id: contextId
-  } = useContext(PermalinksContext); // TODO: Make contextRoutes the fallback if routes is not provided.
+  } = useContext(PermalinksContext); // Makes contextRoutes the fallback if routes is not provided.
 
   const _id = id ?? contextId;
   const _routes = routes ?? contextRoutes; //use context if not routes provided
@@ -18,16 +18,10 @@ export default function usePermalinks({ routes, config, id }) {
   const push = (path) => pushLocation({ path }, path);
   const navigate = (path) => navigateTo({ path });
 
-  const [locationPath, setLocationPath] = useState();
+  const route = _routes?.find((route) => pathArray?.includes(route.entry));
 
-  useEffect(() => {
-    setLocationPath([...pathArray]);
-  }, [pathArray]);
-
-  const route = _routes?.find((route) => locationPath?.includes(route.entry));
-
-  const routePath = locationPath?.slice(
-    locationPath?.findIndex((path) => path === route?.entry) + 1
+  const routePath = pathArray?.slice(
+    pathArray?.findIndex((path) => path === route?.entry) + 1
   );
 
   const { routeData, isLoading } = useRouteData({
@@ -35,6 +29,8 @@ export default function usePermalinks({ routes, config, id }) {
     routePath,
     queryObject
   });
+
+  //TODO Receive default routeData and push location.
 
   return { data: routeData, isLoading, push, navigate };
 }
